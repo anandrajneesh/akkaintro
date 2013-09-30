@@ -176,9 +176,26 @@ val result = Await.result(future, timeout.duration).asInstanceOf[String]
 					<h2>Asynchronous Access</h2>
 					<p>With the map method</p>
 					<pre><code data-trim>
-
+implicit val timeout = Timeout(5 seconds)
+val future = myActor ? "Hello"
+future.map {x => println(x)}
 					</code></pre>
 				</section>
+
+				<section>
+					<h2>Asynchronous Access</h2>
+					<p>With callbacks</p>
+					<pre><code data-trim>
+implicit val timeout = Timeout(5 seconds)
+val future = myActor ? "Hello"
+future.onSuccess {
+  case x: String => println(x)
+}
+					</code></pre>
+					<p>onFailure and onComplete callbacks are provided too</p>
+				</section>
+
+
 
 				<section>
 					<h2>Pretty Code</h2>
