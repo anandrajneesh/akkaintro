@@ -119,7 +119,7 @@
 
 				<section>
 					<h2>Anatomy of an Actor</h2>
-					<p>...Drawing...</p>
+						<img class="stretch" src="images/actor.png">
 				</section>
 
 				<section>
@@ -218,7 +218,37 @@ router ! message
 
         <section>
 					<h2>Supervision</h2>
+					<ul>
+						<li>Actors are organised in a hierarchical structure</li>
+						<li>Supervisors are regular actors that monitors other actors</li>
+						<li>When an actor creates another actor, it automatically becomes its supervisor</li>
+						<li>Monitored actors can be supervisors themselves too</li>
+						<li>Monitoring is based on "let it crash" concept (monitored actors throw an exception)</li>
+						<li>Supervisors define strategy how to handle the exceptions</li>
+					</ul>
         </section>
+
+        <section>
+					<h2>Supervision (2)</h2>
+					<p>Two kind of Strategies</p>
+					<ul>
+						<li>OneForOneStrategy: if one of the supervised children goes down, only that child is acted on</li>
+						<li>OneForAllStrategy: if one of the supervised children goes down, all supervised children are acted on</li>
+					</ul>
+				</section>
+
+				<section>
+				  <h2>Supervision (3)</h2>
+				  <pre><code data-trim>
+override val supervisorStrategy =
+  OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
+    case _: ArithmeticException      ⇒ Resume
+    case _: NullPointerException     ⇒ Restart
+    case _: IllegalArgumentException ⇒ Stop
+    case _: Exception                ⇒ Escalate
+  }
+  				</code></pre>
+				</section>
 
 			</div>
 
