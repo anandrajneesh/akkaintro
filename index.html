@@ -133,14 +133,14 @@ class myActor extends Actor {
   def receive = {
     case "Hello" => sender ! "world"
 
-    case x => println("Hello, " + x)
+    case x: String => println("Hello, " + x)
 
     case _ =>
   }
 }
 
 val system = ActorSystem("mySystem")
-val myActor = system.actorOf(Props[MyActor], "myactor1")
+val myActor = system.actorOf(Props[myActor], "myactor1")
 					</code></pre>
 				</section>
 
