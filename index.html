@@ -54,7 +54,7 @@
 
 				<section>
 					<h2>The Challenge (2)</h2>
-					<p>Modern systems must be:</p>0
+					<p>Modern systems must be:</p>
 					<ul>
 						<li>Fault tolerant</li>
 						<li>highly concurrent</li>
@@ -72,6 +72,13 @@
 							<li>Locks are hard to use</li>
 						</ul>
 					</ul>
+          <aside class="notes">
+The predominant approach to concurrency today is that of shared mutable state – a large number of stateful objects whose state can be changed by multiple parts of your application, each running in their own thread. Typically, the code is interspersed with read and write locks, to make sure that the state can only be changed in a controlled way and prevent multiple threads from mutating it simultaneously. At the same time, we are trying hard not to lock too big a block of code, as this can drastically slow down the application.
+
+More often than not, code like this has originally been written without having concurrency in mind at all – only to be made fit for a multi-threaded world once the need arose. While writing software without the need for concurrency like this leads to very straightforward code, adapting it to the needs of a concurrent world leads to code that is really, really difficult to read and understand.
+
+The core problem is that low-level synchronization constructs like locks and threads are very hard to reason about. As a consequence, it’s very hard to get it right: If you can’t easily reason about what’s going on, you can be sure that nasty bugs will ensue, from race conditions to deadlocks or just strange behaviour – maybe you’ll only notice after some months, long after your code has been deployed to your production servers.
+					</aside>
 				</section>
 
 				<section>
@@ -101,6 +108,13 @@
 						<li>Asynchronous message passing</li>
 						<li>Location Transparancy</li>
 					</ul>
+  				<aside class="notes">
+  					<ul>
+  						<li>
+								write highly performant concurrent code that is easy to reason about
+							</li>
+						</ul>
+					</aside>
 				</section>
 
 				<section>
@@ -115,6 +129,19 @@
 						<li>a router, load-balancer</li>
 						<li>a Finite State Machine</li>
 					</ul>
+					<aside class="notes">
+<ul>
+	<li>
+		lots of light-weight entities called actors
+	</li>
+	<li>
+		responsible for only a very small task, and is thus easy to reason about
+	</li>
+	<li>
+		communicate with messages
+	</li>
+</ul>
+					</aside>
 				</section>
 
 				<section>
@@ -142,6 +169,9 @@ class myActor extends Actor {
 val system = ActorSystem("mySystem")
 val myActor = system.actorOf(Props[myActor], "myactor1")
 					</code></pre>
+					<aside class="notes">
+						not use new to create actor objects, we use the actorsystem and have an actorref returned
+					</aside>
 				</section>
 
 				<section>
@@ -209,9 +239,15 @@ future.onSuccess {
         </section>
 
         <section>
+        	<h2>Routers</h2>
+						<img class="stretch" src="images/router.png">
+        </section>
+
+        <section>
         	<h2>Creating a Router</h2>
           <pre><code data-trim>
-val router = system.actorOf(Props[MyActor].withRouter(RoundRobinRouter(nrOfInstances = 5)))
+val router = system.actorOf(Props[MyActor]
+                   .withRouter(RoundRobinRouter(nrOfInstances = 5)))
 router ! message
           </code></pre>
         </section>
@@ -226,6 +262,14 @@ router ! message
 						<li>Monitoring is based on "let it crash" concept (monitored actors throw an exception)</li>
 						<li>Supervisors define strategy how to handle the exceptions</li>
 					</ul>
+					<aside class="notes">
+Every actor has a parent and every actor can create children.
+The actor model is meant to help you achieve a high level of fault tolerance
+So how do we we deal with failure
+
+ActorSystem an actor ? no it is the guardian actor
+explain via system.actorOf from example
+					</aside>
         </section>
 
         <section>
