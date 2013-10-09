@@ -294,6 +294,17 @@ override val supervisorStrategy =
   				</code></pre>
 				</section>
 
+				<section>
+					<h2>The Actor Lifecycle</h2>
+					<ul>
+					  <li>preStart: Called when an actor is started, allowing you to do some initialization logic. The default implementation is empty.</li>
+            <li>postStop: Empty by default, allowing you to clean up resources. Called after stop has been called for the actor.</li>
+            <li>preRestart: Called right before a crashed actor is restarted. By default, it stops all children of that actor and then calls postStop to allow cleaning up of resources.</li>
+            <li>postRestart: Called immediately after an actor has been restarted. Simply calls preStart by default.</li>
+          </ul>
+				</section>
+
+
 			</div>
 
 		</div>
